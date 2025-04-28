@@ -1,50 +1,46 @@
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-
 import Link from "next/link";
 import OtpRegisterForm from "./OtpRegistration";
-import { useRouter } from "next/router";
 
-export default function Banner() {
-  const router = useRouter();
-  const { cr } = router.query;
-  const [bg, setBackgroundImage] = useState<string | null>(null);
+interface BannerProps {
+  themeFolder: string; // <-- Added this prop
+}
+
+export default function Banner({ themeFolder }: BannerProps) {
+  const [bg, setBackgroundImage] = useState<string>(
+    `/themes/${themeFolder}/001.webp`
+  );
 
   useEffect(() => {
-    if (router.isReady) {
-      let folder = null;
-      if (cr === undefined) {
-        folder = "default";
-      } else {
-        folder = cr;
-      }
-
+    if (typeof window !== "undefined") {
       const setBgImageByOrientation = () => {
         if (window.matchMedia("(orientation: portrait)").matches) {
-          setBackgroundImage(`/themes/${folder}/002.webp`);
+          setBackgroundImage(`/themes/${themeFolder}/002.webp`);
         } else {
-          setBackgroundImage(`/themes/${folder}/001.webp`);
+          setBackgroundImage(`/themes/${themeFolder}/001.webp`);
         }
       };
+
       setBgImageByOrientation();
       window.addEventListener("resize", setBgImageByOrientation);
+
       return () => {
         window.removeEventListener("resize", setBgImageByOrientation);
       };
     }
-    // }
-  }, [cr,router.isReady]);
+  }, [themeFolder]);
 
   return (
     <section>
       {/* Mobile banner image */}
-
-      {bg && router?.isReady && (
+      {bg && (
         <Image
           src={bg}
           alt="Banner"
           fill
           sizes="100vw"
+          priority
           className="md:h-auto w-full !relative object-cover md:hidden block"
         />
       )}
@@ -53,13 +49,14 @@ export default function Banner() {
         <div className="md:flex justify-between items-center h-full w-full flex-wrap px-3">
           <div className="md:w-[66%] w-full md:h-full" id="registration">
             {/* Medium to large banner image */}
-            <div className=" md:w-[90%] w-full mx-auto md:block hidden md:h-[310px] md:h-full">
-              {bg && router?.isReady && (
+            <div className="md:w-[90%] w-full mx-auto md:block hidden md:h-[310px] md:h-full">
+              {bg && (
                 <Image
                   src={bg}
                   alt="banner"
                   fill
                   sizes="59vw"
+                  priority
                   className="md:h-auto w-[90%] !relative hidden md:block rounded-2xl object-contain"
                 />
               )}
@@ -67,22 +64,20 @@ export default function Banner() {
           </div>
           <div className="relative flex items-center flex-1">
             <div
-              className=" z-[10]
-            w-full
-            flex justify-center md:block
-            md:top-1/2 md:left-1/2 md:transform md:-translate-x-1/2 md:-translate-y-1/2 
-            md:static md:transform-none"
+              className="z-[10] w-full flex justify-center md:block
+                md:top-1/2 md:left-1/2 md:transform md:-translate-x-1/2 md:-translate-y-1/2 
+                md:static md:transform-none"
             >
               <div
-                className=" h-fit bg-[#f0f0f0] p-5 rounded-xl  max-w-[600px]
-            shadow-md border-2 border-[#6a678c]"
+                className="h-fit bg-[#f0f0f0] p-5 rounded-xl max-w-[600px]
+                shadow-md border-2 border-[#6a678c]"
               >
                 <h6 className="text-md text-black uppercase font-bold mb-2">
                   Win Real Cash with IPL
                 </h6>
                 <OtpRegisterForm />
 
-                <div className="flex items-center gap-2 md: my-[10px] ">
+                <div className="flex items-center gap-2 md:my-[10px]">
                   <div className="w-full h-[1px] !bg-[#909090]" />
                   <p className="text-[#8f8f93] text-[14px]">OR</p>
                   <div className="w-full h-[1px] !bg-[#909090]" />
