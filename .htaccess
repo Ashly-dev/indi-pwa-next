@@ -1,0 +1,15 @@
+RewriteEngine On
+
+# Force HTTPS if needed (optional)
+
+# RewriteCond %{HTTPS} off
+
+# RewriteRule ^(.\*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Proxy all requests to Next.js app running on localhost:3000
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.\*)$ http://127.0.0.1:3000/$1 [P,L]
+
+ProxyPassReverse / http://127.0.0.1:3000/
