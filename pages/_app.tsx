@@ -71,7 +71,7 @@ export default function App({ Component, pageProps }: AppProps) {
       // const manifestUrl = "manifest.json"
       if (typeof window !== "undefined") {
         // Get the domain dynamically from window.location.origin
-        const manifestUrl = `${window.location.origin}/manifest.php${
+        const manifestUrl = `/manifest.php${
           queryParams ? `?${queryParams}` : ""
         }`;
 
