@@ -4,10 +4,9 @@ import type { NextRequest } from "next/server";
 export function middleware(request: NextRequest) {
   const loggedInStatus = request.cookies.get("loggedIn")?.value;
 
-  if (loggedInStatus === "1") {
+  // Only redirect if logged in and not on the root path (i.e., landing page)
+  if (loggedInStatus === "1" && request.nextUrl.pathname !== "/") {
     const url = request.nextUrl.clone();
-
-    // Default redirect path based on your login logic
     const game = url.searchParams.get("game")?.toLowerCase() || "live";
     const availablePaths: Record<string, string> = {
       home: "home",
